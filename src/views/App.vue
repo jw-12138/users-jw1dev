@@ -1,0 +1,69 @@
+<template>
+  <div v-show="userSignedIn">
+    <p>
+      Welcome, {{username}}!
+    </p>
+    <div>
+      <div>
+        <button @click="signOut" :aria-busy="signingOut">Sign Out</button>
+      </div>
+      <div>
+        <button class="outline" @click="router.push('/change-password')">Change Your Password</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import {Auth} from '../js/auth.js'
+import {ref, onMounted} from 'vue'
+import {useRouter} from 'vue-router'
+import md5 from 'md5'
+import {notify} from '../js/utils.js'
+
+let router = useRouter()
+
+let gettingUserInfo = ref(true)
+
+let username = ref('')
+let userSignedIn = ref(false)
+onMounted(() => {
+  Auth.currentSession().then(res => {
+    console.log(res)
+    getUserInfo(res)
+    userSignedIn.value = true
+  }).catch(err => {
+    console.log(err)
+    router.push('/sign-in')
+    gettingUserInfo.value = false
+  })
+})
+
+let avatar = ref('')
+let getUserInfo = function (res) {
+  username.value = res.idToken.payload['cognito:username']
+  let email = res.idToken.payload['email']
+  let hash = md5(email)
+  avatar.value = `https://www.gravatar.com/avatar/${hash}?s=120&d=identicon`
+  gettingUserInfo.value = false
+}
+
+let signingOut = ref(false)
+let signOut = function () {
+  let c = confirm('Are you sure you want to sign out?')
+  if(!c){
+    return
+  }
+  signingOut.value = true
+  Auth.signOut().then(res => {
+    signingOut.value = false
+    router.push('/sign-in')
+    notify({
+      text: 'You\'ve been signed out.'
+    })
+  }).catch(err => {
+    console.log(err)
+    signingOut.value = false
+  })
+}
+</script>

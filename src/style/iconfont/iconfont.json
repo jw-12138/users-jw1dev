@@ -1,0 +1,30 @@
+{
+  "id": "3899330",
+  "name": "user center at jw1.dev",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "15838473",
+      "name": "error",
+      "font_class": "error",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "15838517",
+      "name": "prompt",
+      "font_class": "prompt",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "15838532",
+      "name": "success",
+      "font_class": "success",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    }
+  ]
+}
