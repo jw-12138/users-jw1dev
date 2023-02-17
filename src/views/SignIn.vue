@@ -65,20 +65,17 @@ let username = ref('')
 let password = ref('')
 
 onMounted(function () {
-  checkUser()
-
   if(localStorage.getItem('fromID') && localStorage.getItem('from')){
-    insertFromID()
     hasFrom.value = true
-    return false
   }
 
   if (route.query.from && route.query.id) {
     hasFrom.value = true
     localStorage.setItem('from', route.query.from)
     localStorage.setItem('fromID', route.query.id)
-    insertFromID()
   }
+
+  checkUser()
 })
 
 let checkUser = () => {
@@ -101,6 +98,8 @@ let checkUser = () => {
     }
   }).catch(err => {
     console.log(err)
+  }).finally(() => {
+    if(hasFrom.value) insertFromID()
   })
 }
 
