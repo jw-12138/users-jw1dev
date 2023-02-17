@@ -28,12 +28,15 @@ let gettingUserInfo = ref(true)
 let username = ref('')
 let userSignedIn = ref(false)
 onMounted(() => {
-  Auth.currentSession().then(res => {
-    console.log(res)
+  Auth.currentUserInfo().then(res => {
+    if(!res.username){
+      throw new Error('oops')
+    }
     getUserInfo(res)
     userSignedIn.value = true
   }).catch(err => {
     console.log(err)
+    localStorage.clear()
     router.push('/sign-in')
     gettingUserInfo.value = false
   })
@@ -41,8 +44,8 @@ onMounted(() => {
 
 let avatar = ref('')
 let getUserInfo = function (res) {
-  username.value = res.idToken.payload['cognito:username']
-  let email = res.idToken.payload['email']
+  username.value = res.username
+  let email = res.attributes.email
   let hash = md5(email)
   avatar.value = `https://www.gravatar.com/avatar/${hash}?s=120&d=identicon`
   gettingUserInfo.value = false

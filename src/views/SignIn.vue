@@ -76,20 +76,23 @@ onMounted(function () {
 })
 
 let checkUser = () => {
-  Auth.currentSession().then(res => {
-    console.log(res)
-    alreadyLogin.value = true
-    notify({
-      text: 'You\'re already signed in',
-      duration: 6000
-    })
-    setTimeout(() => {
-      if (hasFrom.value) {
-        sendLoginInfo()
-      } else {
-        router.push('/')
-      }
-    }, 1000)
+  Auth.currentSession().then(r => {
+    return Auth.currentUserInfo()
+  }).then(res => {
+    if(res.username){
+      alreadyLogin.value = true
+      notify({
+        text: 'You\'re already signed in',
+        duration: 6000
+      })
+      setTimeout(() => {
+        if (hasFrom.value) {
+          sendLoginInfo()
+        } else {
+          router.push('/')
+        }
+      }, 1000)
+    }
   }).catch(err => {
     console.log(err)
   })
