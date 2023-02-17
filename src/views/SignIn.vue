@@ -72,6 +72,10 @@ onMounted(function () {
     insertFromID()
   }
 
+  if(localStorage.getItem('fromID') && localStorage.getItem('from')){
+    insertFromID()
+  }
+
   checkUser()
 })
 
