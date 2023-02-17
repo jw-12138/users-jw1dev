@@ -20,10 +20,6 @@ const routes = [
   {
     path: '/change-password',
     component: () => import('../views/ChangePassword.vue')
-  },
-  {
-    path: '/sign-out',
-    component: () => import('../views/SignOut.vue')
   }
 ]
 
