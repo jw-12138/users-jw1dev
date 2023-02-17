@@ -51,7 +51,7 @@ onMounted(() => {
 })
 
 let checkUser = () => {
-  Auth.currentSession().then(res => {
+  Auth.currentUserInfo().then(res => {
     console.log(res)
     notify({
       text: 'You\'re already signed in. If you want to create a new account, please <b>sign out first</b>.',
