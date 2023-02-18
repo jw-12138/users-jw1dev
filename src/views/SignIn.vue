@@ -130,7 +130,10 @@ function redirect() {
 
   switch (from) {
     case 'chat':
-      u = (location.hostname === 'localhost' ? 'http://localhost:5072/?id=' : 'https://chat.jw1.dev/?id=') + id
+      u = 'https://chat.jw1.dev/?id=' + id
+      break
+    case 'chat_local':
+      u = 'http://localhost:5072/?id=' + id
       break
   }
 
