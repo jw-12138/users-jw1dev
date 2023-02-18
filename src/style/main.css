@@ -61,3 +61,27 @@ a[target="_blank"]:after {
     transform: translateX(150%);
   }
 }
+
+.progress-bar {
+  @apply fixed top-0 left-0 w-full z-50 pointer-events-none;
+}
+
+.progress-bar .light {
+  background-image: linear-gradient(to right, transparent, dodgerblue, mediumpurple, transparent);
+  @apply w-4/5 h-1 absolute left-0 top-0;
+  animation: laser .6s ease-in-out infinite;
+}
+
+@keyframes laser {
+  0% {
+    left: -100%
+  }
+
+  100%{
+    left: 100%
+  }
+}
+
+.progress-bar .bg {
+  @apply transition-all opacity-0 bg-black dark:bg-white w-0 h-1 overflow-hidden relative;
+}

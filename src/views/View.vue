@@ -1,4 +1,5 @@
 <template>
+  <ProgressBar></ProgressBar>
   <Header></Header>
 
   <Notifications></Notifications>
@@ -18,6 +19,7 @@ import Notifications from './Notifications.vue'
 
 import {ref} from 'vue'
 import axios from 'axios'
+import ProgressBar from './ProgressBar.vue'
 let year = ref('')
 
 axios({
