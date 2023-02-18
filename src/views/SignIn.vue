@@ -7,18 +7,18 @@
     <form action="javascript:" @submit="login">
       <div>
         <label for="username">Username</label>
-        <input type="text" id="username" v-model="username" required :disabled="alreadyLogin"/>
+        <input type="text" id="username" v-model="username" required :disabled="alreadyLogin === null"/>
       </div>
       <div>
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required minlength="8" :disabled="alreadyLogin"/>
+        <input type="password" id="password" v-model="password" required minlength="8" :disabled="alreadyLogin === null"/>
       </div>
       <p>
         Your information is managed by AWS Cognito. You can read more about it <a href="https://aws.amazon.com/cognito/"
                                                                                   target="_blank">here</a>.
       </p>
       <div>
-        <button type="submit" :aria-busy="loggingIn" :disabled="alreadyLogin">Sign In</button>
+        <button type="submit" :aria-busy="loggingIn" :disabled="alreadyLogin === null">Sign In</button>
       </div>
       <p>
         Don't have an account?
@@ -42,7 +42,7 @@ let router = useRouter()
 let route = useRoute()
 let hasFrom = ref(false)
 
-let alreadyLogin = ref(false)
+let alreadyLogin = ref(null)
 
 let insertFromID = function () {
   axios({
@@ -84,21 +84,21 @@ let checkUser = () => {
   }).then(res => {
     if(res.username){
       alreadyLogin.value = true
-      notify({
-        text: 'You\'re already signed in',
-        duration: 6000
-      })
-      setTimeout(() => {
-        if (hasFrom.value) {
-          sendLoginInfo()
-        } else {
-          router.push('/')
-        }
-      }, 1000)
+      if (hasFrom.value) {
+        sendLoginInfo()
+      } else {
+        notify({
+          text: 'You\'re already signed in'
+        })
+        router.push('/')
+      }
+    }else{
+      alreadyLogin.value = false
     }
   }).catch(err => {
     console.log(err)
   }).finally(() => {
+    alreadyLogin.value = false
     if(hasFrom.value) insertFromID()
   })
 }

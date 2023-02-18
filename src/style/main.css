@@ -15,7 +15,7 @@ a[target="_blank"]:after {
 
 .notifications {
   position: fixed;
-  @apply top-0 right-0 p-4 w-60 z-50 pointer-events-none;
+  @apply top-0 right-0 p-4 w-60 z-50;
 }
 
 .notifications .item {

@@ -21,7 +21,7 @@
         Your information is managed by AWS Cognito. You can read more about it <a href="https://aws.amazon.com/cognito/" target="_blank">here</a>.
       </p>
       <p>
-        <b>Note: </b> Signing up will be available when App development is finished.
+        <b>Note: </b> Sign up will be available when App development is finished.
       </p>
       <div>
         <button :aria-busy="signingUp" type="submit" disabled>SignUp</button>
@@ -53,13 +53,13 @@ onMounted(() => {
 let checkUser = () => {
   Auth.currentUserInfo().then(res => {
     console.log(res)
-    notify({
-      text: 'You\'re already signed in. If you want to create a new account, please <b>sign out first</b>.',
-      duration: 6000
-    })
-    setTimeout(()=> {
+    if(res.username){
+      notify({
+        text: 'You\'re already signed in. If you want to create a new account, please <b>sign out first</b>.',
+        duration: 5000
+      })
       router.push('/')
-    }, 100)
+    }
   }).catch(err => {
     console.log(err)
   })
@@ -74,12 +74,12 @@ let signUp = () => {
       email: email.value
     }
   }).then(res => {
-    router.push('/confirm-sign-up')
     notify({
       text: 'Your account has been created. Please check your e-mail to confirm your account.',
       duration: 5000,
       type: 'success'
     })
+    router.push('/confirm-sign-up')
   }).catch(err => {
     console.log(err)
     notify({

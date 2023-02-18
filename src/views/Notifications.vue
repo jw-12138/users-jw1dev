@@ -1,6 +1,11 @@
 <template>
   <div class="notifications">
-    <div class="item" v-for="item in _n" :class="{
+    <div
+      class="item"
+      v-for="item in _n"
+      @mouseenter="item.focus = true"
+      @mouseleave="item.focus = false"
+      :class="{
       'in': item.shouldEnter,
       'out': item.shouldLeave,
       'flat': item.shouldCollapse,

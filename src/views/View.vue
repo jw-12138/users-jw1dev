@@ -7,7 +7,7 @@
     <router-view></router-view>
   </keep-alive>
 
-  <footer class="text-center text-xs p-10">
+  <footer class="text-center text-xs py-10">
     © {{year}} | <a href="https://jw1.dev">jw1.dev</a> | <a href="mailto:support@jw1.dev">Support</a> | Code with ❤️
   </footer>
 </template>
