@@ -7,19 +7,19 @@
     <form action="javascript:" @submit="login">
       <div>
         <label for="username">Username</label>
-        <input type="text" id="username" v-model="username" required :disabled="alreadyLogin === null"/>
+        <input type="text" id="username" v-model="username" required :disabled="alreadyLogin !== true"/>
       </div>
       <div>
         <label for="password">Password</label>
         <input type="password" id="password" v-model="password" required minlength="8"
-               :disabled="alreadyLogin === null"/>
+               :disabled="alreadyLogin !== true"/>
       </div>
       <p>
         Your information is managed by AWS Cognito. You can read more about it <a href="https://aws.amazon.com/cognito/"
                                                                                   target="_blank">here</a>.
       </p>
       <div>
-        <button type="submit" :aria-busy="loggingIn" :disabled="alreadyLogin === null">Sign In</button>
+        <button type="submit" :aria-busy="loggingIn" :disabled="alreadyLogin !== true">Sign In</button>
       </div>
       <p>
         Don't have an account?
@@ -44,22 +44,6 @@ let route = useRoute()
 let hasFrom = ref(false)
 
 let alreadyLogin = ref(null)
-
-let insertFromID = function () {
-  axios({
-    url: baseAPI + '/davinci/add_id',
-    method: 'POST',
-    data: {
-      id: localStorage.getItem('fromID')
-    }
-  }).then(res => {
-    console.log(res)
-    notify('Sign In ID recorded')
-  }).catch(err => {
-    console.log(err)
-  })
-}
-
 
 let loggingIn = ref(false)
 let username = ref('')
@@ -112,10 +96,7 @@ function sendLoginInfo() {
       id: localStorage.getItem('fromID')
     }
   }).then(res => {
-    console.log(res)
-    setTimeout(function () {
-      redirect()
-    }, 1300)
+    redirect()
   }).catch(err => {
     console.log(err)
   })
