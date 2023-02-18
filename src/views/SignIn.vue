@@ -11,7 +11,8 @@
       </div>
       <div>
         <label for="password">Password</label>
-        <input type="password" id="password" v-model="password" required minlength="8" :disabled="alreadyLogin === null"/>
+        <input type="password" id="password" v-model="password" required minlength="8"
+               :disabled="alreadyLogin === null"/>
       </div>
       <p>
         Your information is managed by AWS Cognito. You can read more about it <a href="https://aws.amazon.com/cognito/"
@@ -65,7 +66,7 @@ let username = ref('')
 let password = ref('')
 
 onMounted(function () {
-  if(localStorage.getItem('fromID') && localStorage.getItem('from')){
+  if (localStorage.getItem('fromID') && localStorage.getItem('from')) {
     hasFrom.value = true
   }
 
@@ -82,24 +83,23 @@ let checkUser = () => {
   Auth.currentSession().then(r => {
     return Auth.currentUserInfo()
   }).then(res => {
-    if(res.username){
+    if (res.username) {
       alreadyLogin.value = true
-      if (hasFrom.value) {
-        sendLoginInfo()
-      } else {
+      if (!hasFrom.value) {
         notify({
           text: 'You\'re already signed in'
         })
         router.push('/')
+      } else {
+        sendLoginInfo()
       }
-    }else{
+    } else {
       alreadyLogin.value = false
     }
   }).catch(err => {
     console.log(err)
   }).finally(() => {
     alreadyLogin.value = false
-    if(hasFrom.value) insertFromID()
   })
 }
 
