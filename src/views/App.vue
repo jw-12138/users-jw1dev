@@ -1,4 +1,6 @@
 <template>
+  <div aria-busy="true" class="p-8" v-show="!userSignedIn">
+  </div>
   <div v-show="userSignedIn">
     <p>
       Welcome, {{username}}!
