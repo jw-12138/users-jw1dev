@@ -19,6 +19,15 @@
     --primary-hover: #f3f3f3;
     --primary-focus: rgba(255, 255, 255, 0.5);
     --primary-inverse: #000000;
+    --card-background-color: #232323;
+    --form-element-border-color: #555;
+    --form-element-background-color: #333;
     --font-family: 'Varela Round', system-ui,-apple-system,"Segoe UI","Roboto","Ubuntu","Cantarell","Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    --secondary: hsl(0deg 0% 78%);
+    --secondary-hover: hsl(0deg 0% 91%);
+    --secondary-focus: rgb(152 152 152 / 25%);
+    --secondary-inverse: #fff;
+    --muted-color: hsl(0deg 0% 55%);
+    --muted-border-color: #616161;
   }
 }
