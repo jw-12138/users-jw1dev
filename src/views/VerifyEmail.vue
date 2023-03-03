@@ -42,13 +42,13 @@ username.value = route.query.username
 
 let confirm = () => {
   confirming.value = true
-  Auth.confirmSignUp(username.value, code.value).then(res => {
+  Auth.verifyCurrentUserAttributeSubmit('email', code.value).then(res => {
     notify({
-      text: 'Your account has been confirmed',
+      text: 'Your E-mail has been confirmed, Thank you!',
       duration: 6000
     })
     setTimeout(()=> {
-      router.push('/sign-in')
+      router.push('/')
     }, 100)
   }).catch(err => {
     console.log(err)
@@ -67,7 +67,7 @@ let confirm = () => {
 let resending = ref(false)
 let resend = function () {
   resending.value = true
-  Auth.resendSignUp(username.value).then(res => {
+  Auth.verifyCurrentUserAttribute('email').then(res => {
     notify({
       text: 'Code sent',
       duration: 6000

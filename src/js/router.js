@@ -20,6 +20,14 @@ const routes = [
   {
     path: '/change-password',
     component: () => import('../views/ChangePassword.vue')
+  },
+  {
+    path: '/new-password',
+    component: () => import('../views/NewPassword.vue')
+  },
+  {
+    path: '/verify-email',
+    component: () => import('../views/VerifyEmail.vue')
   }
 ]
 

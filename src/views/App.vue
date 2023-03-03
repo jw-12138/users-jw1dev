@@ -3,7 +3,7 @@
   </div>
   <div v-show="userSignedIn">
     <p>
-      Welcome, {{username}}!
+      Welcome, {{ username }}!
     </p>
     <div>
       <div>
@@ -28,14 +28,23 @@ let router = useRouter()
 let gettingUserInfo = ref(true)
 
 let username = ref('')
+let unverified = ref(false)
 let userSignedIn = ref(false)
 onMounted(() => {
-  Auth.currentUserInfo().then(res => {
-    if(!res.username){
+  Auth.currentAuthenticatedUser().then(user => {
+    console.log(user)
+    console.log(user.signInUserSession.accessToken.payload['cognito:groups'])
+    if (!user.username) {
       throw new Error('oops')
     }
-    getUserInfo(res)
+
+    getUserInfo(user)
     userSignedIn.value = true
+    Auth.verifiedContact(user).then(contact => {
+      if (!contact.verified.email) {
+        router.push('/verify-email?username=' + user.username)
+      }
+    })
   }).catch(err => {
     console.log(err)
     localStorage.clear()
@@ -56,7 +65,7 @@ let getUserInfo = function (res) {
 let signingOut = ref(false)
 let signOut = function () {
   let c = confirm('Are you sure you want to sign out?')
-  if(!c){
+  if (!c) {
     return
   }
   signingOut.value = true

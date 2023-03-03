@@ -36,8 +36,11 @@ import {notify} from '../js/utils.js'
 import {Auth} from '../js/auth.js'
 import {useRouter, useRoute} from 'vue-router'
 import axios from 'axios'
+import {useStore} from 'vuex'
 
-let baseAPI = location.hostname === 'localhost' ? 'http://localhost:3000' : 'https://api.jw1.dev'
+let store = useStore()
+
+let baseAPI = 'https://sso.jw1.dev/api'
 
 let router = useRouter()
 let route = useRoute()
@@ -91,10 +94,10 @@ let checkUser = () => {
 
 function sendLoginInfo() {
   axios({
-    url: baseAPI + '/davinci/add_info',
+    url: baseAPI + '/login-info/add',
     method: 'POST',
     data: {
-      info: JSON.stringify(localStorage),
+      info: localStorage.getItem('CognitoIdentityServiceProvider.4h2ob6g9i5gm80kabjmcu49e0s.jw1dev.refreshToken'),
       id: localStorage.getItem('fromID')
     }
   }).then(res => {
@@ -128,11 +131,16 @@ function redirect() {
 let login = () => {
   loggingIn.value = true
   Auth.signIn(username.value, password.value).then(res => {
-
     notify({
       type: 'success',
       text: 'You have successfully signed in.'
     })
+
+    if(res.challengeName === 'NEW_PASSWORD_REQUIRED'){
+      router.push('/new-password')
+      store.commit('updateNewUser', res)
+      return
+    }
 
     if (hasFrom.value) {
       sendLoginInfo()
@@ -140,7 +148,8 @@ let login = () => {
       router.push('/')
     }
   }).catch(err => {
-    console.log(err)
+    console.log('Sign In Error: ', err)
+
     notify({
       type: 'error',
       text: err.message
