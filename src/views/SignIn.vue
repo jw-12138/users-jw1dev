@@ -108,7 +108,10 @@ function sendLoginInfo() {
     url: baseAPI + '/login-info/add',
     method: 'POST',
     data: {
-      info: localStorage.getItem(userObject.keyPrefix + '.'+ userObject.username +'.refreshToken'),
+      info: {
+        refreshToken: localStorage.getItem(userObject.keyPrefix + '.'+ userObject.username +'.refreshToken'),
+        username: userObject.username
+      },
       id: localStorage.getItem('fromID')
     }
   }).then(res => {
