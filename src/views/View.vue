@@ -20,7 +20,7 @@ import Notifications from './Notifications.vue'
 import {ref} from 'vue'
 import axios from 'axios'
 import ProgressBar from './ProgressBar.vue'
-let year = ref('')
+let year = ref('2023')
 
 axios({
   method: 'get',
@@ -29,5 +29,7 @@ axios({
   let timestamp = res.data.unixtime
   let date = new Date(timestamp * 1000)
   year.value = date.getFullYear()
+}).catch(err => {
+  console.log(err)
 })
 </script>

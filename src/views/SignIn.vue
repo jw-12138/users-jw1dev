@@ -53,6 +53,8 @@ let loggingIn = ref(false)
 let username = ref('')
 let password = ref('')
 
+let userObject = ''
+
 onMounted(function () {
   if (localStorage.getItem('fromID') && localStorage.getItem('from')) {
     hasFrom.value = true
@@ -64,13 +66,22 @@ onMounted(function () {
     localStorage.setItem('fromID', route.query.id)
   }
 
+  if(route.query.client_id){
+    Auth.configure({
+      userPoolId: 'ap-northeast-2_mFkRRvlLv',
+      userPoolWebClientId: route.query.client_id
+    })
+  }
+
   checkUser()
 })
 
 let checkUser = () => {
   Auth.currentSession().then(r => {
-    return Auth.currentUserInfo()
+    return Auth.currentAuthenticatedUser()
   }).then(res => {
+    console.log(res)
+    userObject = res
     if (res.username) {
       alreadyLogin.value = true
       if (!hasFrom.value) {
@@ -97,7 +108,7 @@ function sendLoginInfo() {
     url: baseAPI + '/login-info/add',
     method: 'POST',
     data: {
-      info: localStorage.getItem('CognitoIdentityServiceProvider.4h2ob6g9i5gm80kabjmcu49e0s.jw1dev.refreshToken'),
+      info: localStorage.getItem(userObject.keyPrefix + '.'+ userObject.username +'.refreshToken'),
       id: localStorage.getItem('fromID')
     }
   }).then(res => {
