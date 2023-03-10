@@ -56,7 +56,7 @@ let password = ref('')
 let userObject = ''
 
 onMounted(function () {
-  if (localStorage.getItem('fromID') && localStorage.getItem('from')) {
+  if (localStorage.getItem('fromID') && localStorage.getItem('from') && localStorage.getItem('fromClientID')) {
     hasFrom.value = true
   }
 
@@ -64,12 +64,13 @@ onMounted(function () {
     hasFrom.value = true
     localStorage.setItem('from', route.query.from)
     localStorage.setItem('fromID', route.query.id)
+    localStorage.setItem('fromClientID', route.query.client_id)
   }
 
-  if(route.query.client_id){
+  if(route.query.client_id || localStorage.getItem('fromClientID')){
     Auth.configure({
       userPoolId: 'ap-northeast-2_mFkRRvlLv',
-      userPoolWebClientId: route.query.client_id
+      userPoolWebClientId: route.query.client_id || localStorage.getItem('fromClientID')
     })
   }
 
@@ -77,8 +78,12 @@ onMounted(function () {
 })
 
 let checkUser = () => {
-  Auth.currentSession().then(r => {
-    return Auth.currentAuthenticatedUser()
+  Auth.currentUserInfo().then(res => {
+    if(!res || !res.username){
+      alreadyLogin.value = false
+      return
+    }
+    return Auth.currentUserPoolUser()
   }).then(res => {
     console.log(res)
     userObject = res
@@ -108,13 +113,14 @@ function sendLoginInfo() {
     url: baseAPI + '/login-info/add',
     method: 'POST',
     data: {
-      info: {
+      info: JSON.stringify({
         refreshToken: localStorage.getItem(userObject.keyPrefix + '.'+ userObject.username +'.refreshToken'),
         username: userObject.username
-      },
+      }),
       id: localStorage.getItem('fromID')
     }
   }).then(res => {
+    console.log('redirect')
     redirect()
   }).catch(err => {
     console.log(err)
@@ -127,6 +133,7 @@ function redirect() {
   let u = null
   localStorage.removeItem('from')
   localStorage.removeItem('fromID')
+  localStorage.removeItem('fromClientID')
 
   switch (from) {
     case 'chat':
@@ -134,6 +141,12 @@ function redirect() {
       break
     case 'chat_local':
       u = 'http://localhost:5072/?id=' + id
+      break
+    case 'photo':
+      u = 'https://photo.jw1.dev/admin/?id=' + id
+      break
+    case 'photo_local':
+      u = 'http://localhost:5999/admin/?id=' + id
       break
   }
 
@@ -157,6 +170,7 @@ let login = () => {
     }
 
     if (hasFrom.value) {
+      userObject = res
       sendLoginInfo()
     } else {
       router.push('/')
