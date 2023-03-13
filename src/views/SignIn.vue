@@ -40,8 +40,6 @@ import {useStore} from 'vuex'
 
 let store = useStore()
 
-let baseAPI = 'https://sso.jw1.dev/api'
-
 let router = useRouter()
 let route = useRoute()
 let hasFrom = ref(false)
@@ -110,7 +108,7 @@ let checkUser = () => {
 
 function sendLoginInfo() {
   axios({
-    url: baseAPI + '/login-info/add',
+    url: 'https://api.jw1.dev/cognito/add_login_info',
     method: 'POST',
     data: {
       info: JSON.stringify({
