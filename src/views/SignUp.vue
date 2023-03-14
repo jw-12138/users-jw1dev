@@ -24,7 +24,7 @@
         <b>Note: </b> Sign up will be available when App development is finished.
       </p>
       <div>
-        <button :aria-busy="signingUp" type="submit" disabled>SignUp</button>
+        <button :aria-busy="signingUp" type="submit" disabled>Sign Up</button>
       </div>
       <div>
         Back to <router-link to="sign-in">Sign In</router-link>
